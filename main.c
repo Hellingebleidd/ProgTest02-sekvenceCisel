@@ -2,80 +2,96 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX_LEN 40
-
-struct zadanie {
-    char vstup[MAX_LEN];//vstupny retazec
-    long lo, hi;         //interval
-    int operacia;       //pozadovana operacia
-};
 
 int vypisNespravnyVstup() {
     printf("Nespravny vstup.\n");
     return -1;
 }
 
-int spracujVstup(struct zadanie *poziadavka) {
-    int dlzka;              //dlzka vstupneho retazca
-    char vstup[MAX_LEN], *subbuff;  //pracovny retazec
+int spracujVstupGetChar(long *hi, long *lo, char *operacia) {
+    char stateMachine[] = "<AB;C x";  //prechody medzi stavmi <9;9> x
+    int state = 0;  //aktualny stav
+    char c;         //precitana hodnota
+    long cislo = 0;  //pomocna hodnota cislo
 
-    strcpy(vstup, poziadavka->vstup);
-    dlzka = (int) strlen(vstup);
+    printf("Zadejte interval:\n");
 
-    //prva kontrola na dlzku
-    if (dlzka < 7)
-        return vypisNespravnyVstup();
-    //hlada prvy <
-    if (vstup[0] != '<')
-        return vypisNespravnyVstup();
+    while ((c = (char) getchar()) != '\n') {
+        switch (stateMachine[state]) {
 
-    //kontroluje lo; zacina za <
-    int i = 1;
-    while (vstup[i] != ';') {
-        if (vstup[i] < '0' || vstup[i] > '9' || ++i >= dlzka)
-            return vypisNespravnyVstup();
+            case '<':       //prvy zobacik
+                if (c != '<')
+                    return -1;
+                state++;
+                break;
+
+            case 'A':       //musi byt cislo
+                if (c < '0' || c > '9')
+                    return -1;
+                state++;
+                cislo = c - '0';  //zapise cislo
+                break;
+
+            case 'B':       //musi byt cislo, alebo ;
+                if (c == ';') {
+                    state++;
+                    *lo = cislo;
+                } else if (c < '0' || c > '9')
+                    return -1;
+                cislo = (cislo * 10) + (c - '0');  //zapise cislo
+                break;
+
+            case ';':       //musi byt cislo
+                if (c < '0' || c > '9')
+                    return -1;
+                state++;
+                cislo = c - '0';  //zapise cislo
+                break;
+
+            case 'C':       //musi byt cislo, alebo >
+                if (c == '>') {
+                    state++;
+                    *hi = cislo;
+                } else if (c < '0' || c > '9')
+                    return -1;
+                cislo = (cislo * 10) + (c - '0');  //zapise cislo
+                break;
+
+            case ' ':       //ocakava medzeru
+                if (c != ' ')
+                    return -1;
+                state++;
+                break;
+
+            case 'x':       //pozadovana operacia lzs
+                if (c != 'l' && c != 'z' && c != 's')
+                    return -1;
+                state++;
+                *operacia = c;
+                break;
+
+            default:
+                return -1;
+        }
+//        printf("%c.", c);
     }
-    //dostal sa na ; vypocita cislo
-    poziadavka->lo = strtol(vstup + 1, &subbuff, 10);
-    //do vstup skopiruje zvysok
-    strcpy(vstup, subbuff);
+//    printf("\nVsetko v poriadku\n lo=%ld hi=%ld \n", *lo, *hi);
+    if (*lo > *hi)
+        return -1;
 
-    //kontroluje hi>
-    i = 1;
-    dlzka = (int) strlen(vstup);
-    while (vstup[i] != '>') {
-        if (vstup[i] < '0' || vstup[i] > '9' || ++i >= dlzka)
-            return vypisNespravnyVstup();
-    }
-    //dostal sa na > vypocita cislo
-    poziadavka->hi = strtol(vstup + 1, &subbuff, 10);
-    //do vstup skopiruje zvysok
-    strcpy(vstup, subbuff);
-
-    //kontroluje operaciu: presne 3 znaky, [1] je ' ', [2] je zo zoznamu
-    if (strlen(vstup) == 3 && vstup[1] == ' ' && (vstup[2] == 'l' || vstup[2] == 'z' || vstup[2] == 's'))
-        poziadavka->operacia = vstup[2];
-    else
-        return vypisNespravnyVstup();
-
-    return 1;
-
+    return 0;
 }
 
 
 int main() {
-//    char subbuff[MAX_LEN];  //pracovny retazec
+    long hi, lo;
+    char operacia;
 
-    struct zadanie poziadavka;
-
-
-    printf("Zadejte interval:\n");
-    scanf(" %40s", poziadavka.vstup);
 
     //ak je spracovanie neuspesne (-1), skonci s chybou
-    if (spracujVstup(&poziadavka) == -1)
-        return -1;
-
+    if (spracujVstupGetChar(&hi, &lo, &operacia) == -1)
+        return vypisNespravnyVstup();
+    printf("lo=%ld, hi=%ld, operacia=%c", lo, hi, operacia);
 
     return 0;
 }
