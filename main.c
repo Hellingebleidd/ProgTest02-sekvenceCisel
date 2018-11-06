@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 
 
 int vypisNespravnyVstup() {
@@ -83,6 +84,26 @@ int spracujVstupGetChar(long *hi, long *lo, char *operacia) {
 }
 
 
+int binarneCislo(int cislo){
+    int pocet,i;
+    int bin[40];
+
+    pocet=0;  //nastavi index na 0
+    while(cislo>0){
+        bin[pocet]=cislo % 2;
+        cislo=cislo/2;
+        pocet++;
+    }
+
+    //vypise to bin. cislo v opacnom poradi
+    for (i=(pocet-1); i>=0; i--){
+        printf("%d", bin[i]);
+    }
+
+}
+
+
+
 int main() {
     long hi, lo;
     char operacia;
@@ -92,7 +113,8 @@ int main() {
     if (spracujVstupGetChar(&hi, &lo, &operacia) == -1)
         return vypisNespravnyVstup();
     printf("lo=%ld, hi=%ld, operacia=%c", lo, hi, operacia);
-
+   // binarneCislo(lo) -> nefunguje lebo to je long nie int...
+   //binarneCislo(hi);
     return 0;
 }
 
