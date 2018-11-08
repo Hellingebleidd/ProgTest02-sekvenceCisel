@@ -73,43 +73,70 @@ int spracujVstupGetChar(long *hi, long *lo, char *operacia) {
             default:
                 return -1;
         }
-//        printf("%c.", c);
     }
-//    printf("\nVsetko v poriadku\n lo=%ld hi=%ld \n", *lo, *hi);
+
     if (*lo > *hi)
         return -1;
 
     return 0;
 }
 
-
 int main() {
-    char retazec[3000] = "";
-    int pocitadlo = 0;
     long hi, lo;
     char operacia;
-    long cislo, tmp;
-
+    long i, cislo, tmpNajdlhsieNuly;
+    long sekvence = 0, nul = 0, cifer = 0;
 
     //ak je spracovanie neuspesne (-1), skonci s chybou
-//    if (spracujVstupGetChar(&hi, &lo, &operacia) == -1)
-//        return vypisNespravnyVstup();
+    if (spracujVstupGetChar(&hi, &lo, &operacia) == -1){
+        printf("Nespravny vstup.\n");
+        return -1;
+    }
 //    printf("lo=%ld, hi=%ld, operacia=%c\n", lo, hi, operacia);
 
-    //testovanie 1683;1999
-    lo = 10;
-    hi = 20;
     //cisla nie je potrebno zobrazovat, preto retazec nebudem otacat
-    for (cislo = lo; cislo <= hi; ++cislo) {
-        tmp = cislo;
+    for (i = lo; i <= hi; ++i) {
+        cislo = i;
+        tmpNajdlhsieNuly = 0;
         do {
-            retazec[pocitadlo++] = (char) ((tmp % 2) + '0');
-        } while ((tmp = tmp / 2) > 0);
-        retazec[pocitadlo++] =' ';
+            switch (cislo % 2) {
+                case 0:
+                    tmpNajdlhsieNuly++;
+                    nul++;
+                    cifer++;
+                    break;
+                case 1:
+                    if (sekvence < tmpNajdlhsieNuly)
+                        sekvence = tmpNajdlhsieNuly;
+                    tmpNajdlhsieNuly = 0;
+                    cifer++;
+                    break;
+                default:
+                    return -1;  //dajaka glupocina
+            }
+        } while ((cislo = cislo / 2) > 0);
+        if (sekvence < tmpNajdlhsieNuly)
+            sekvence = tmpNajdlhsieNuly;
     }
 
-    printf("Binarne cislo je: %s, %d", retazec, pocitadlo);
+//    l pro výpočet celkové délky sekvence (počtu cifer),
+//    z pro výpočet počtu nul v sekvenci,
+//    s pro výpočet nejdelší kontinuální sekvence nul.
+//    printf("Pro <%li;%li> -> Cifer: %li, Nul: %li, Sekvence: %li", lo, hi, cifer, nul, sekvence);
+    switch (operacia) {
+        case 'l':
+            printf("Cifer: %li\n", cifer);
+            break;
 
+        case 'z':
+            printf("Nul: %li\n", nul);
+            break;
+        case 's':
+            printf("Sekvence: %li\n", sekvence);
+            break;
+        default:
+            break;
+    }
 
     return 0;
 }
