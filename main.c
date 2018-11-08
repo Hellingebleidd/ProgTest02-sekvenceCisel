@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <math.h>
 
 
 int vypisNespravnyVstup() {
@@ -84,44 +83,33 @@ int spracujVstupGetChar(long *hi, long *lo, char *operacia) {
 }
 
 
-int binarneCislo(long cislo){
-    int pocet,i;
-    int bin[40];
-
-    pocet=0;  //nastavi index na 0
-    while(cislo>0) {
-        bin[pocet]=cislo % 2;
-        cislo=cislo/2;
-        pocet++;
-    }
-
-    //vypise to bin. cislo v opacnom poradi
-    //TODO: on ich nema vypisovat, iba pamatat si...
-    for (i=(pocet-1); i>=0; i--){
-        printf("%d", bin[i]);
-    }
-
-}
-
-
-
 int main() {
-    long hi, lo, cislo;
+    char retazec[3000] = "";
+    int pocitadlo = 0;
+    long hi, lo;
     char operacia;
-    int poc,j;
+    long cislo, tmp;
 
 
     //ak je spracovanie neuspesne (-1), skonci s chybou
-    if (spracujVstupGetChar(&hi, &lo, &operacia) == -1)
-        return vypisNespravnyVstup();
-    printf("lo=%ld, hi=%ld, operacia=%c\n", lo, hi, operacia);
+//    if (spracujVstupGetChar(&hi, &lo, &operacia) == -1)
+//        return vypisNespravnyVstup();
+//    printf("lo=%ld, hi=%ld, operacia=%c\n", lo, hi, operacia);
 
-    //vypise cisla binarne
-    poc=hi-lo;
-    for (j=0; j<=poc; j++){
-        cislo=lo+j;
-        printf(" ", binarneCislo(cislo));
+    //testovanie 1683;1999
+    lo = 10;
+    hi = 20;
+    //cisla nie je potrebno zobrazovat, preto retazec nebudem otacat
+    for (cislo = lo; cislo <= hi; ++cislo) {
+        tmp = cislo;
+        do {
+            retazec[pocitadlo++] = (char) ((tmp % 2) + '0');
+        } while ((tmp = tmp / 2) > 0);
+        retazec[pocitadlo++] =' ';
     }
+
+    printf("Binarne cislo je: %s, %d", retazec, pocitadlo);
+
 
     return 0;
 }

@@ -1,3 +1,6 @@
+#vystupy z testovania
+testy/*_out_zz.txt
+
 # Prerequisites
 *.d
 
@@ -44,7 +47,7 @@
 
 # Kernel Module Compile Results
 *.mod*
-*.cmd
+#*.cmd
 .tmp_versions/
 modules.order
 Module.symvers
