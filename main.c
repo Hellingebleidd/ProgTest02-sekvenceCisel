@@ -88,13 +88,12 @@ int spracujVstupGetChar(long *hi, long *lo, char *operacia) {
 int main() {
     long hi, lo, cislo,j;
     char operacia;
-    int cifra=0,  binC[10], nula=0 ;
+    int cifra=0,  binC[10], nula=0, s=0, sekv=0 ;
 
 
     //ak je spracovanie neuspesne (-1), skonci s chybou
     if (spracujVstupGetChar(&hi, &lo, &operacia) == -1)
         return vypisNespravnyVstup();
-    //printf("lo=%ld, hi=%ld, operacia=%c\n", lo, hi, operacia);
 
 
     for (j = lo; j <= hi; j++) {
@@ -103,11 +102,14 @@ int main() {
             binC[j]=cislo %2;
             cislo=cislo/2;
             cifra++;
-            if (binC[j]==0)
+            if (binC[j]==0) {
                 nula++;
+                s++;
+            }
+            else s=0;
+            if (sekv<s) sekv=s;
         }
     }
-    //printf("pocet cifier: %d    pocet nul: %d", cifra, nula);
     switch(operacia){
         case 'l':
             printf("Cifer: %d\n",cifra);
@@ -116,10 +118,10 @@ int main() {
             printf("Nul: %d\n", nula);
             break;
         case 's':
-            printf("Sekvence: 'tu bude cislo'");
+            printf("Sekvence: %d\n", sekv);
             break;
         default:
-            printf ("Nespravny vtup.\n");
+            printf ("Nespravny vstup.\n");
     }
 
     return 0;
