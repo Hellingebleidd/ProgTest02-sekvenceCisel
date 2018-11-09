@@ -84,45 +84,45 @@ int spracujVstupGetChar(long *hi, long *lo, char *operacia) {
 }
 
 
-int binarneCislo(long cislo){
-    int pocet,i;
-    int bin[40];
-
-    pocet=0;  //nastavi index na 0
-    while(cislo>0) {
-        bin[pocet]=cislo % 2;
-        cislo=cislo/2;
-        pocet++;
-    }
-
-    //vypise to bin. cislo v opacnom poradi
-    //TODO: on ich nema vypisovat, iba pamatat si...
-    for (i=(pocet-1); i>=0; i--){
-        printf("%d", bin[i]);
-    }
-
-}
-
-
 
 int main() {
-    long hi, lo, cislo;
+    long hi, lo, cislo,j;
     char operacia;
-    int poc,j;
+    int cifra=0,  binC[10], nula=0 ;
 
 
     //ak je spracovanie neuspesne (-1), skonci s chybou
     if (spracujVstupGetChar(&hi, &lo, &operacia) == -1)
         return vypisNespravnyVstup();
-    printf("lo=%ld, hi=%ld, operacia=%c\n", lo, hi, operacia);
+    //printf("lo=%ld, hi=%ld, operacia=%c\n", lo, hi, operacia);
 
-    //vypise cisla binarne
-    poc=hi-lo;
-    for (j=0; j<=poc; j++){
-        cislo=lo+j;
-        printf(" ", binarneCislo(cislo));
+
+    for (j = lo; j <= hi; j++) {
+        cislo=j;
+        while (cislo>0){            //ak je lo=0 tak to neurobi nic, ale ak nastavim cislo >=0 tak to nefunguje absolutne
+            binC[j]=cislo %2;
+            cislo=cislo/2;
+            cifra++;
+            if (binC[j]==0)
+                nula++;
+        }
+    }
+    //printf("pocet cifier: %d    pocet nul: %d", cifra, nula);
+    switch(operacia){
+        case 'l':
+            printf("Cifer: %d\n",cifra);
+            break;
+        case 'z':
+            printf("Nul: %d\n", nula);
+            break;
+        case 's':
+            printf("Sekvence: 'tu bude cislo'");
+            break;
+        default:
+            printf ("Nespravny vtup.\n");
     }
 
     return 0;
 }
+
 
