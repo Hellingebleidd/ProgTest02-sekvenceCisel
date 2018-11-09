@@ -96,9 +96,9 @@ int main() {
         return vypisNespravnyVstup();
 
 
-    for (j = lo; j <= hi; j++) {
+    for (j = hi; j >= lo; j--) {
         cislo=j;
-        while (cislo>0){            //ak je lo=0 tak to neurobi nic, ale ak nastavim cislo >=0 tak to nefunguje absolutne
+        while (cislo>0){            //ako napisem 0 alebo 9 cyhodi nespravny vstup
             binC[j]=cislo %2;
             cislo=cislo/2;
             cifra++;
