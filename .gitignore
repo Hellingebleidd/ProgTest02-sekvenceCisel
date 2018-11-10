@@ -1,5 +1,6 @@
 #vystupy z testovania
-testy/*_out_zz.txt
+tests/*_out_zz.txt
+tests/null
 
 # Prerequisites
 *.d
