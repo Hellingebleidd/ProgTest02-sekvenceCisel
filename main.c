@@ -87,7 +87,7 @@ int spracujVstupGetChar(long *hi, long *lo, char *operacia) {
 int main() {
     long hi, lo, cislo, j;
     char operacia;
-    int cifra = 0, binC[40], nula = 0, s = 0, sekv = 0;
+    int cifra = 0, binC, nula = 0, s = 0, sekv = 0;
     int vysledok;
 
 
@@ -106,10 +106,10 @@ int main() {
     for (j = hi; j >= lo; j--) {
         cislo = j;
         do {            //ako napisem 0 alebo 9 cyhodi nespravny vstup
-            binC[j] = cislo % 2;
+            binC = cislo % 2;
             cislo = cislo / 2;
             cifra++;
-            if (binC[j] == 0) {
+            if (binC == 0) {
                 nula++;
                 s++;
             } else
